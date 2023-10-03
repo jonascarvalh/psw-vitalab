@@ -22,15 +22,15 @@
             </div>
 
             <div class="col-md-9">
-                <form action="" method="POST">
+                <form action="{% url 'register' %}" method="POST"> {% csrf_token %}
                 <label>First Name</label>
                 <br>
-                <input type="text" class="input-default" name="primeiro_nome">
+                <input type="text" class="input-default" name="first_name">
                 <br>
                 <br>
                 <label>Last Name</label>
                 <br>
-                <input type="text" class="input-default" name="ultimo_nome">
+                <input type="text" class="input-default" name="last_name">
             </div>
         </div>
 
@@ -43,7 +43,7 @@
                 <br>
                 <label>Password</label>
                 <br>
-                <input type="text" class="input-default w100" name="senha">
+                <input type="password" class="input-default w100" name="password">
             </div>
 
             <div class="col-md-4">
@@ -54,12 +54,12 @@
                 <br>
                 <label>Confirm Password</label>
                 <br>
-                <input type="text" class="input-default w100" name="confirmar_senha">
+                <input type="password" class="input-default w100" name="confirm_password">
             </div>
             
         </div>
         <br>
-        <input type="submit" class="btn-default">
+        <input type="submit" class="btn-default" value="Register">
     </form>
     </div>
 {% endblock %}
