@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.messages import constants
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 def register(request):
@@ -71,3 +72,28 @@ def repeat_username(user_register):
         return True
     except:
         return False
+
+def log_in(request):
+    if request.method == "GET":
+        return render(request, 'login.html')
+    elif request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(
+            username=username,
+            password=password
+        )
+
+        if user:
+            # login
+            login(request, user)
+            return redirect("/")
+        else:
+            # warning
+            messages.add_message(
+                request, 
+                constants.ERROR, 
+                f"Invalid credentials!"
+            )
+            return redirect('/users/login')
