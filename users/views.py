@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.messages import constants
 from django.contrib import messages
+
 # Create your views here.
 def register(request):
     if request.method == "GET":
@@ -15,6 +16,14 @@ def register(request):
         email = request.POST.get('email')
         confirm_password = request.POST.get('confirm_password')
 
+        if repeat_username(username):
+            messages.add_message(
+                request, 
+                constants.ERROR, 
+                f"The username {username} already exists!"
+            )
+            return redirect('/users/register')
+        
         if password != confirm_password:
             messages.add_message(
                 request, 
@@ -53,3 +62,12 @@ def register(request):
             return redirect('/users/register')
         
         return redirect('/users/register')
+
+def repeat_username(user_register):
+    try:
+        user = User.objects.get(
+            username=user_register
+        )
+        return True
+    except:
+        return False
