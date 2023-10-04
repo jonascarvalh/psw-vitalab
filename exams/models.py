@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class ExamsTypes(models.Model):
+class ExamsType(models.Model):
     choices_type = (
         ('I', 'Image Test'),
         ('S', 'Blood Test')
