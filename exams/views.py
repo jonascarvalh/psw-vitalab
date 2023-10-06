@@ -39,6 +39,7 @@ def request_exams(request):
             }, 
         )
 
+@login_required
 def close_order(request):
     exams_id = request.POST.getlist('exams')
     exam_request = ExamsTypes.objects.filter(id__in=exams_id)
@@ -61,5 +62,36 @@ def close_order(request):
         order_exam.exams.add(request_exams_temp)
 
     order_exam.save()
-    messages.add(request_exams_temp, constants.SUCCESS, 'Exams Order sucessfully done!')
+    messages.add_message(request_exams_temp, constants.SUCCESS, 'Exams Order sucessfully done!')
     return redirect('/exams/show_orders/')
+
+def manage_orders(request):
+    orders_exams = ExamsOrders.objects.filter(
+        user=request.user
+    )
+    return render(
+        request, 
+        'manage_orders.html',
+        {
+            'orders_exams': orders_exams,
+        },
+    )
+
+def cancel_order(request, order_id):
+    order = ExamsOrders.objects.get(id=order_id)
+    if not order.user == request.user:
+        messages.add_message(
+            request,
+            constants.ERROR,
+            'This order is not your.'
+        )
+        return redirect('/exams/manage_orders/')
+    
+    order.scheduled = False
+    order.save()
+    messages.add_message(
+        request,
+        constants.SUCCESS,
+        'Order cancelled sucessfully.'
+    )
+    return redirect('/exams/manage_orders/')

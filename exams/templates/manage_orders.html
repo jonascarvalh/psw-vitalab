@@ -1,0 +1,55 @@
+{% extends "bases/base.html" %}
+{% load static %}
+
+{% block 'head' %}
+    <link href="{% static 'exams/css/css.css' %}" rel="stylesheet">
+    <link href="{% static 'exams/css/manage_orders.css' %}" rel="stylesheet">
+{% endblock 'head' %}
+
+
+{% block 'content' %}
+    <br> 
+    <br>
+    <div class="container">
+        {% if messages %}
+            <br>
+            {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <div class="card card-view">
+            <table>
+                <tr>
+                  <th>Request</th>
+                  <th>Date</th>
+                  <th>Exams</th>
+                  <th>Action</th>
+                </tr>
+
+                {% for order in orders_exams %}
+                    <tr class="linha-tabela">
+                        <td>{{order.id}}</td>
+                        <td>{{order.date}}</td>
+                        <td>
+                            <select class="form-select">
+                                {% for exam in order.exams.all %}
+                                    <option style="color: black"  value="">{{exam.exam.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <a href="{% url 'cancel_order' order.id %}" class="btn btn-danger {% if not order.scheduled %} disabled {% endif %}">
+                                Cancel
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+               
+              </table>
+              
+            
+        </div>
+
+    </div>
+
+{% endblock 'content' %}
