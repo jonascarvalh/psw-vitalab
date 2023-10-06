@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils.safestring import mark_safe
 # Create your models here.
 class ExamsTypes(models.Model):
     choices_type = (
@@ -32,6 +32,15 @@ class ExamRequest(models.Model):
     def __str__(self):
         return f'{self.user} | {self.exam.name}'
 
+    def badge_template(self):
+        if self.status == 'E':
+            classes = 'bg-warning text-dark'
+            text = 'In Analysis'
+        elif self.status == 'F':
+            classes = 'bg-success'
+            text = 'Finished'
+        return mark_safe(f'<span class="badge {classes}">{text}</span>')
+        
 class ExamsOrders(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     exams = models.ManyToManyField(ExamRequest)

@@ -65,6 +65,7 @@ def close_order(request):
     messages.add_message(request_exams_temp, constants.SUCCESS, 'Exams Order sucessfully done!')
     return redirect('/exams/show_orders/')
 
+@login_required
 def manage_orders(request):
     orders_exams = ExamsOrders.objects.filter(
         user=request.user
@@ -77,6 +78,7 @@ def manage_orders(request):
         },
     )
 
+@login_required
 def cancel_order(request, order_id):
     order = ExamsOrders.objects.get(id=order_id)
     if not order.user == request.user:
@@ -95,3 +97,71 @@ def cancel_order(request, order_id):
         'Order cancelled sucessfully.'
     )
     return redirect('/exams/manage_orders/')
+
+@login_required
+def manage_exams(request):
+    exams = ExamRequest.objects.filter(user=request.user)
+    return render(
+        request, 
+        'manage_exams.html',
+        {
+            'exams': exams,
+        },
+    )
+
+@login_required
+def allow_open_exam(request, exam_id):
+    exam = ExamRequest.objects.get(id=exam_id)
+
+    if not exam.pass_required:
+        if exam_have_result(exam):
+            return redirect(exam.result.url)
+        else:
+            messages.add_message(
+                request,
+                constants.ERROR,
+                "This result doesn't exists."
+            )
+            return redirect('/exams/manage_exams/')
+        
+    return redirect(f'/exams/request_password_exam/{exam_id}')
+
+@login_required
+def request_password_exam(request, exam_id):
+    exam = ExamRequest.objects.get(id=exam_id)
+
+    if request.method == "GET":
+        return render(
+            request, 
+            "request_password_exam.html",
+            {
+                'exam': exam
+            }
+        )
+    elif request.method == "POST":
+        password = request.POST.get('password')
+
+        if password == exam.password:
+            if exam_have_result(exam):
+                return redirect(exam.result.url)
+            else:
+                messages.add_message(
+                request,
+                constants.ERROR,
+                "This result doesn't exists."
+            )
+            return redirect(f'/exams/request_password_exam/{exam.id}')
+        else:
+            messages.add_message(
+                request,
+                constants.ERROR,
+                'Invalid Password!'
+            )
+            return redirect(f'/exams/request_password_exam/{exam.id}')
+
+def exam_have_result(exam):
+    try:
+        redirect(exam.result.url)
+        return True
+    except:
+        return False
