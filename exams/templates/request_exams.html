@@ -1,0 +1,71 @@
+{% extends "bases/base.html" %}
+{% load static %}
+
+{% block 'head' %}
+    <link href="{% static 'exams/css/css.css' %}" rel="stylesheet">
+{% endblock 'head' %}
+
+{% block 'content' %}
+    <br>
+    <br>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md">
+                <h3 class="font-destaque">Request Exams</h3>
+                <form action="{% url 'request_exams' %}" method="POST">{% csrf_token %}
+                    <label for="">Select the exams to take:</label>
+                    <select class="select form-control bg-select" multiple name="exams">
+                        {% for exam in exams_types %}
+                            <option class="opt" value="{{exam.id}}">{{exam.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <input  type="submit" class="btn-default tamanho-2"  name="ultimo_nome" value="Request Exams">
+                </form>
+            </div>
+
+            <div class="col-md-2">
+
+            </div>
+
+            <div class="col-md card">
+                {% if request_exams_objects %}
+                    {% for exam in request_exams_objects %}
+                        <div style="font-size: 20px; font-weight: bold">
+                            {% if exam.available %}
+                                <img src="{% static 'exams/img/check.png' %}">
+                            {% else %}
+                                <img src="{% static 'exams/img/exit.png' %}">
+                            {% endif %}
+
+                            {{exam.name}}
+                            <span class="previa-preco">
+                                {{exam.price}}
+                            </span>
+                        </div>
+                    {% endfor %}
+                    
+                    <hr style="color: white;">
+                    <div>
+                        <label>Total: </label><label class="previa-preco">{{price_total}}</label>
+                    </div>
+                    <br>
+
+                    <h5>{{date_now}}</h5>
+                    <br>
+
+                    <form action="{% url 'close_order' %}" method="POST">
+                        {% for exam in request_exams_objects %} {% csrf_token %}
+                            <input style="color: black" type="hidden" value="{{exam.id}}" name="exams">
+                        {% endfor %}
+                        <button class="btn-secundario">Close Order</button>
+                    </form>
+                {% else %}
+                    <h3>No exam selected!</h3>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock 'content' %}
