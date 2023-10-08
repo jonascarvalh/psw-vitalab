@@ -29,7 +29,7 @@
                     <br>
                     <br>
                     {% if exam.result %}
-                        <a style="width: 100%;" href="{{exam.result.url}}" target="__blank"><div  style="width: 100%;" id="pdf-container"></div></a>
+                        <a style="width: 100%;" href="{{exam.result.url}}" target="_blank"><div  style="width: 100%;" id="pdf-container"></div></a>
                     {% endif %}
             </div>
             <div class="col-md-6">
@@ -46,7 +46,7 @@
 
                 <input type="submit" value="Save" class="btn-default">
                 </form>
-                <a style="text-decoration: none;" href="" class="btn-secundario">Gerar senha</a>
+                <a style="text-decoration: none;" href="{% url 'gen_password' exam.id %}" class="btn-secundario" target="_blank">Generate Password</a>
             </div>
         </div>
         

@@ -45,7 +45,7 @@
 
                 {% for customer in customers %}
                     <tr class="linha-tabela">
-                        <td><a href="{% url 'customers' customer.id %}">{{customer.get_full_name}}</a></td>
+                        <td><a href="{% url 'customer' customer.id %}">{{customer.get_full_name}}</a></td>
                         <td>{{customer.email}}</td>
                         
                         <td>

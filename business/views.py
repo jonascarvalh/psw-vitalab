@@ -5,6 +5,7 @@ from django.db.models.functions import Concat
 from django.db.models import Value
 from django.contrib.admin.views.decorators import staff_member_required
 from exams.models import ExamRequest
+from .utils import generate_exam_pdf, generate_random_password
 
 # Create your views here.
 @staff_member_required
@@ -55,4 +56,26 @@ def proxy_pdf(request, exam_id):
     exam = ExamRequest.objects.get(id=exam_id)
     response = exam.result.open()
 
-    return FileResponse(response)
+    return HttpResponse(response)
+
+def gen_password(request, exam_id):
+    exam = ExamRequest.objects.get(id=exam_id)
+
+    if exam.password:
+        return FileResponse(generate_exam_pdf(
+            exam.exam.name, 
+            exam.user.first_name,
+            exam.password
+            ),
+            filename="token.pdf"
+        )
+    
+    exam.password = generate_random_password(9)
+    exam.save()
+    return FileResponse(generate_exam_pdf(
+            exam.exam.name, 
+            exam.user.first_name,
+            exam.password
+            ),
+            filename="token.pdf"
+        )
