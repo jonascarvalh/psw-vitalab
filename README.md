@@ -7,7 +7,7 @@ Created in 8th PyStackWeek
 [![](https://img.shields.io/github/issues/jonascarvalh/psw-vitalab)](https://github.com//jonascarvalh/psw-vitalab/issues)
 
 ## Screenshots
-![](screenshots\home.png)
+![home](https://github.com/jonascarvalh/psw-vitalab/assets/79672134/e16a2941-7110-4556-984a-966b3db96923)
 
 
 ## How to install?
