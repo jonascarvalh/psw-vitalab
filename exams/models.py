@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from secrets import token_urlsafe
+from django.utils import timezone
+from datetime import timedelta
 
 # Create your models here.
 class ExamsTypes(models.Model):
@@ -52,14 +54,14 @@ class ExamsOrders(models.Model):
     def __str__(self):
         return f'{self.user} | {self.date}'
 
-class AcessoMedico(models.Model):
+class MedicalAccess(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     identification = models.CharField(max_length=50)
-    access_time = models.IntegerField() # Em horas
+    access_time = models.IntegerField() # In hours
     created_at = models.DateTimeField()
-    date_start_exams = models.DateField()
-    date_final_exams = models.DateField()
-    token = models.CharField(max_length=20, null=True, black=True)
+    start_exam_date = models.DateField()
+    final_exam_date = models.DateField()
+    token = models.CharField(max_length=20, null=True, blank=True)
 
     def __str__(self):
         return self.token
@@ -68,4 +70,12 @@ class AcessoMedico(models.Model):
         if not self.token:
             self.token = token_urlsafe(6)
 
-        super(AcessoMedico, self).save(*args, **kwargs)
+        super(MedicalAccess, self).save(*args, **kwargs)
+    
+    @property
+    def status(self):
+        return 'Expired' if timezone.now() > (self.created_at + timedelta(hours=self.access_time)) else 'Active'
+    
+    @property
+    def url(self):
+        return f'http://127.0.0.1:8000/exams/medical_access/{self.token}'

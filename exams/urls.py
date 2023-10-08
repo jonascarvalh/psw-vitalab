@@ -9,4 +9,6 @@ urlpatterns = [
     path('manage_exams/', views.manage_exams, name="manage_exams"),
     path('allow_open_exam/<int:exam_id>', views.allow_open_exam, name='allow_open_exam'),
     path('request_password_exam/<int:exam_id>', views.request_password_exam, name='request_password_exam'),
+    path('gen_medical_access/', views.gen_medical_access, name='gen_medical_access'),
+    path('medical_access/<str:token>', views.medical_access, name='medical_access')
 ]

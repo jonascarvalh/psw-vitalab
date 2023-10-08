@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import ExamsTypes, ExamsOrders, ExamRequest
+from .models import ExamsTypes, ExamsOrders, ExamRequest, MedicalAccess
 from datetime import datetime
 from django.contrib import messages
 from django.contrib.messages import constants
@@ -165,3 +165,43 @@ def exam_have_result(exam):
         return True
     except:
         return False
+
+@login_required
+def gen_medical_access(request):
+    if request.method == "GET":
+        medical_access = MedicalAccess.objects.filter(user=request.user)
+        return render(request, 'gen_medical_access.html', {'medical_access': medical_access})
+    elif request.method == "POST":
+        identification  = request.POST.get('identification')
+        access_time     = request.POST.get('access_time')
+        start_exam_date = request.POST.get('start_exam_date')
+        final_exam_date = request.POST.get('final_exam_date')
+
+        medical_access = MedicalAccess(
+            user            = request.user,
+            identification  = identification,
+            access_time     = access_time,
+            start_exam_date = start_exam_date,
+            final_exam_date = final_exam_date,
+            created_at      = datetime.now()
+        )
+
+        medical_access.save()
+
+        messages.add_message(
+            request,
+            constants.SUCCESS,
+            'Access successfully generated!'
+        )
+        return redirect('/exams/gen_medical_access/')
+
+def medical_access(request, token):
+    access = MedicalAccess.objects.get(token=token)
+    orders = ExamsOrders.objects.filter(user=access.user) \
+    .filter(date__gte=access.start_exam_date) \
+    .filter(date__lte=access.final_exam_date)
+
+    if access.status == 'Expired':
+        messages.add_message(request, constants.ERROR, 'This token has expired. Request other.')
+        return redirect('/users/login/')
+    return render(request, 'medical_access.html', {'orders': orders})
