@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.db.models.functions import Concat
 from django.db.models import Value
 from django.contrib.admin.views.decorators import staff_member_required
@@ -39,3 +39,20 @@ def customer(request, customer_id):
             'exams': exams
         }
     )
+
+@staff_member_required
+def exam_customer(request, exam_id):
+    exam = ExamRequest.objects.get(id=exam_id)
+    return render(
+        request, 
+        'exam_customer.html', 
+        {
+            'exam': exam
+        }
+    )
+
+def proxy_pdf(request, exam_id):
+    exam = ExamRequest.objects.get(id=exam_id)
+    response = exam.result.open()
+
+    return FileResponse(response)
