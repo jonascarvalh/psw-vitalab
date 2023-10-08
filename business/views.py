@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.http import HttpResponse, FileResponse
 from django.db.models.functions import Concat
@@ -6,6 +6,8 @@ from django.db.models import Value
 from django.contrib.admin.views.decorators import staff_member_required
 from exams.models import ExamRequest
 from .utils import generate_exam_pdf, generate_random_password
+from django.contrib import messages
+from django.contrib.messages import constants
 
 # Create your views here.
 @staff_member_required
@@ -79,3 +81,31 @@ def gen_password(request, exam_id):
             ),
             filename="token.pdf"
         )
+
+def change_exam_data(request, exam_id):
+    exam = ExamRequest.objects.get(id=exam_id)
+
+    pdf           = request.FILES.get('result')
+    status        = request.POST.get('status')
+    pass_required = request.POST.get('pass_required')
+
+    if pass_required and (not exam.password):
+        messages.add_message(
+            request,
+            constants.ERROR,
+            'To require the password, first create one!'
+        )
+        return redirect(f'/business/exam_customer/{exam_id}')
+    exam.pass_required = True if pass_required else False
+    if pdf:
+        exam.result = pdf
+
+    exam.status = status
+    exam.save()
+
+    messages.add_message(
+            request,
+            constants.SUCCESS,
+            'Successfully data modified!'
+        )
+    return redirect(f'/business/exam_customer/{exam_id}')
