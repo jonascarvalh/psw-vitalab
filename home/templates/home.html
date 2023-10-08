@@ -1,0 +1,106 @@
+{% extends "bases/base.html" %}
+{% load static %}
+{% block 'head' %}
+    <link href="{% static 'users/css/css.css' %}" rel="stylesheet">
+    <link href="{% static 'vitalab/css/css.css' %}" rel="stylesheet">
+{% endblock 'head' %}
+
+{% block 'content' %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+        <div class="container-fluid">
+        <a class="navbar-brand mb-0 h1" href="{% url 'home' %}">
+            <div class="text-logo">
+                VitaLab
+            </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+            {% if is_staff %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Business
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" href="{% url 'manage_customers' %}">Manage Customers</a></li>
+                </ul>
+            </li>
+            {% endif %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Exams
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" href="{% url 'request_exams' %}">Request Exam</a></li>
+                <li><a class="dropdown-item" href="{% url 'manage_exams' %}">Show Exams</a></li>
+                <li><a class="dropdown-item" href="{% url 'manage_orders' %}">Manage orders</a></li>
+                <li><a class="dropdown-item" href="{% url 'gen_medical_access' %}">Generate Medical Access</a></li>
+                </ul>
+            </li>
+            {% if not authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Login/Register
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                    <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+            </ul>
+        </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="top-section">
+            <div class="image">
+                <img src="{% static 'vitalab/img/tubo-de-ensaio.png' %}" alt="logo_vitalab" class="logo">
+            </div>
+            <div>
+                <h1>VitaLab</h1>
+                <p>Your laboratory software.</p>
+            </div>
+        </div>
+        <div class="mid-section">
+            <div class="card" style="width: 18rem;">
+                <img src="{% static 'vitalab/img/pedido-online.png' %}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Request Exams</h5>
+                  <p class="card-text">Create an order for your exams.</p>
+                  {% if not authenticated %}
+                    <a href="{% url 'login' %}" class="btn btn-home">Open</a>
+                  {% else %}
+                    <a href="{% url 'request_exams' %}" class="btn btn-home">Open</a>
+                  {% endif %}
+                </div>
+            </div>
+            <div class="card" style="width: 18rem;">
+                <img src="{% static 'vitalab/img/tubos-de-ensaio.png' %}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Show Exams</h5>
+                  <p class="card-text">See and manage your exams.</p>
+                  {% if not authenticated %}
+                    <a href="{% url 'login' %}" class="btn btn-home">Open</a>
+                  {% else %}
+                    <a href="{% url 'manage_exams' %}" class="btn btn-home">Open</a>
+                  {% endif %}
+                </div>
+            </div>
+            <div class="card" style="width: 18rem;">
+                <img src="{% static 'vitalab/img/account-manager.png' %}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Manage Medical Access</h5>
+                  <p class="card-text">See and manage medical access.</p>
+                  {% if not authenticated %}
+                    <a href="{% url 'login' %}" class="btn btn-home">Open</a>
+                  {% else %}
+                    <a href="{% url 'gen_medical_access' %}" class="btn btn-home">Open</a>
+                  {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock 'content' %}

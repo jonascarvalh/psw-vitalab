@@ -5,6 +5,7 @@ from .models import ExamsTypes, ExamsOrders, ExamRequest, MedicalAccess
 from datetime import datetime
 from django.contrib import messages
 from django.contrib.messages import constants
+from django.contrib.admin.views.decorators import staff_member_required
 
 # Create your views here.
 @login_required
@@ -62,8 +63,8 @@ def close_order(request):
         order_exam.exams.add(request_exams_temp)
 
     order_exam.save()
-    messages.add_message(request_exams_temp, constants.SUCCESS, 'Exams Order sucessfully done!')
-    return redirect('/exams/show_orders/')
+    messages.add_message(request, constants.SUCCESS, 'Exams Order sucessfully done!')
+    return redirect('/exams/manage_orders/')
 
 @login_required
 def manage_orders(request):

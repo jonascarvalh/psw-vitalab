@@ -8,6 +8,9 @@ from django.contrib.auth import authenticate, login
 # Create your views here.
 def register(request):
     if request.method == "GET":
+        if request.user.is_authenticated:
+            return redirect('/')
+        
         return render(request, 'register.html')
     elif request.method == "POST":
         first_name = request.POST.get('first_name')
@@ -75,7 +78,11 @@ def repeat_username(user_register):
 
 def log_in(request):
     if request.method == "GET":
+        if request.user.is_authenticated:
+            return redirect('/')
+        
         return render(request, 'login.html')
+    
     elif request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
