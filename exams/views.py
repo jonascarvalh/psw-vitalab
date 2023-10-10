@@ -204,5 +204,5 @@ def medical_access(request, token):
 
     if access.status == 'Expired':
         messages.add_message(request, constants.ERROR, 'This token has expired. Request other.')
-        return redirect('/users/login/')
+        return redirect('/exams/gen_medical_access/')
     return render(request, 'medical_access.html', {'orders': orders})
