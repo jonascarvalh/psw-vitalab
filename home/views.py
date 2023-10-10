@@ -9,7 +9,7 @@ def home(request):
             'home.html', 
             {
                 'authenticated': 'True',
-                'is_staff': request.user.is_staff
+                'user': request.user
             }
         )
     

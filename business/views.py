@@ -26,7 +26,8 @@ def manage_customers(request):
         request, 
         'manage_customers.html',
         {
-            'customers': customers
+            'customers': customers,
+            'authenticated': request.user,
         }
     )
 
@@ -39,7 +40,8 @@ def customer(request, customer_id):
         'customer.html', 
         {
             'customer': customer,
-            'exams': exams
+            'exams': exams,
+            'authenticated': request.user,
         }
     )
 
@@ -50,7 +52,8 @@ def exam_customer(request, exam_id):
         request, 
         'exam_customer.html', 
         {
-            'exam': exam
+            'exam': exam,
+            'authenticated': request.user,
         }
     )
 

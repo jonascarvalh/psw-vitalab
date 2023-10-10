@@ -1,66 +1,12 @@
 {% extends "bases/base.html" %}
+
 {% load static %}
 {% block 'head' %}
     <link href="{% static 'users/css/css.css' %}" rel="stylesheet">
-    <link href="{% static 'vitalab/css/css.css' %}" rel="stylesheet">
 {% endblock 'head' %}
 
 {% block 'content' %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
-        <div class="container-fluid">
-        <a class="navbar-brand mb-0 h1" href="{% url 'home' %}">
-            <div class="text-logo">
-                VitaLab
-            </div>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-            {% if is_staff %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Business
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <li><a class="dropdown-item" href="{% url 'manage_customers' %}">Manage Customers</a></li>
-                </ul>
-            </li>
-            {% endif %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Exams
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                {% if not authenticated %}
-                    <li><a class="dropdown-item" href="{% url 'login' %}">Request Exam</a></li>
-                    <li><a class="dropdown-item" href="{% url 'login' %}">Show Exams</a></li>
-                    <li><a class="dropdown-item" href="{% url 'login' %}">Manage orders</a></li>
-                    <li><a class="dropdown-item" href="{% url 'login' %}">Generate Medical Access</a></li>
-                {% else %}
-                    <li><a class="dropdown-item" href="{% url 'request_exams' %}">Request Exam</a></li>
-                    <li><a class="dropdown-item" href="{% url 'manage_exams' %}">Show Exams</a></li>
-                    <li><a class="dropdown-item" href="{% url 'manage_orders' %}">Manage orders</a></li>
-                    <li><a class="dropdown-item" href="{% url 'gen_medical_access' %}">Generate Medical Access</a></li>
-                {% endif %}
-                </ul>
-            </li>
-            {% if not authenticated %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Login/Register
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
-                    <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
-                    </ul>
-                </li>
-            {% endif %}
-            </ul>
-        </div>
-        </div>
-    </nav>
+    {% include "bases/navbar.html" %}
     <div class="container">
         <div class="top-section">
             <div class="image">

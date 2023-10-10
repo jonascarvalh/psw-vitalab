@@ -15,7 +15,10 @@ def request_exams(request):
         return render(
             request, 
             'request_exams.html',
-            context = {'exams_types': exams_types}
+            {
+                'exams_types': exams_types,
+                'authenticated': request.user,
+            }
         )
     elif request.method == "POST":
         exams_id = request.POST.getlist('exams')
@@ -36,7 +39,8 @@ def request_exams(request):
                 'exams_types': exams_types,
                 'request_exams_objects': request_exams_objects,
                 'price_total': price_total,
-                'date_now': datetime.now()
+                'date_now': datetime.now(),
+                'authenticated': request.user,
             }, 
         )
 
@@ -76,6 +80,7 @@ def manage_orders(request):
         'manage_orders.html',
         {
             'orders_exams': orders_exams,
+            'authenticated': request.user,
         },
     )
 
@@ -107,6 +112,7 @@ def manage_exams(request):
         'manage_exams.html',
         {
             'exams': exams,
+            'authenticated': request.user,
         },
     )
 
@@ -136,7 +142,8 @@ def request_password_exam(request, exam_id):
             request, 
             "request_password_exam.html",
             {
-                'exam': exam
+                'exam': exam,
+                'authenticated': request.user,
             }
         )
     elif request.method == "POST":
@@ -171,7 +178,14 @@ def exam_have_result(exam):
 def gen_medical_access(request):
     if request.method == "GET":
         medical_access = MedicalAccess.objects.filter(user=request.user)
-        return render(request, 'gen_medical_access.html', {'medical_access': medical_access})
+        return render(
+            request, 
+            'gen_medical_access.html', 
+                {
+                    'medical_access': medical_access,
+                    'authenticated': request.user,
+                }
+            )
     elif request.method == "POST":
         identification  = request.POST.get('identification')
         access_time     = request.POST.get('access_time')
@@ -205,4 +219,11 @@ def medical_access(request, token):
     if access.status == 'Expired':
         messages.add_message(request, constants.ERROR, 'This token has expired. Request other.')
         return redirect('/exams/gen_medical_access/')
-    return render(request, 'medical_access.html', {'orders': orders})
+    return render(
+        request, 
+        'medical_access.html', 
+            {
+                'orders': orders,
+                'authenticated': request.user,
+            }
+        )
