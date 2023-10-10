@@ -33,10 +33,17 @@
                     Exams
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                {% if not authenticated %}
+                <li><a class="dropdown-item" href="{% url 'login' %}">Request Exam</a></li>
+                <li><a class="dropdown-item" href="{% url 'login' %}">Show Exams</a></li>
+                <li><a class="dropdown-item" href="{% url 'login' %}">Manage orders</a></li>
+                <li><a class="dropdown-item" href="{% url 'login' %}">Generate Medical Access</a></li>
+                {% else %}
                 <li><a class="dropdown-item" href="{% url 'request_exams' %}">Request Exam</a></li>
                 <li><a class="dropdown-item" href="{% url 'manage_exams' %}">Show Exams</a></li>
                 <li><a class="dropdown-item" href="{% url 'manage_orders' %}">Manage orders</a></li>
                 <li><a class="dropdown-item" href="{% url 'gen_medical_access' %}">Generate Medical Access</a></li>
+                {% endif %}
                 </ul>
             </li>
             {% if not authenticated %}
