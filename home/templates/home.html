@@ -7,17 +7,14 @@
 
 {% block 'content' %}
     {% include "bases/navbar.html" %}
-    <p>{{authenticated.is_staff}}</p>
     <div class="container">
-        <div class="top-section">
-            <div class="image">
-                <img src="{% static 'vitalab/img/tubo-de-ensaio.png' %}" alt="logo_vitalab" class="logo">
-            </div>
+        <section class="top-section">
+            <img src="{% static 'vitalab/img/tubo-de-ensaio.png' %}" alt="logo_vitalab" class="logo">
             <div>
                 <h1>VitaLab</h1>
                 <p>Your laboratory software.</p>
             </div>
-        </div>
+        </section>
         <div class="mid-section">
             <div class="card" style="width: 18rem;">
                 <img src="{% static 'vitalab/img/pedido-online.png' %}" class="card-img-top" alt="...">
